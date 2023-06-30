@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  docker-entrypoint.sh: |
+    #!/bin/bash
+kind: ConfigMap
+metadata:
+  name: entrypoint  

@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  my-react-app
+  namespace: default
+  labels:
+    app:  my-react-app
+spec:
+  selector:
+    matchLabels:
+      app: my-react-app
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  my-react-app
+    spec:
+      containers:
+      - name:  my-react-app-container
+        image: ananya21/my-react-app:latest  #ananya21/my-static-server:latest 
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort:  80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  backend
+  namespace: default
+  labels:
+    app:  backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  backend
+    spec:
+      containers:
+      - name:  backend-container
+        image: ananya21/backend:latest  #ananya21/my-static-server:latest 
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 5001
+      #   volumeMounts: 
+      #   - name: entrypoint
+      #     mountPath: /usr/local/bin/
+      # volumes: 
+      #   - name: entrypoint
+      #     configMap:
+      #       name: entrypoint
+
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  mongo
+  namespace: default
+  labels:
+    app:  mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  mongo
+    spec:
+      containers:
+      - name:  mongo-container
+        image: mongo:3.6.19-xenial  #ananya21/my-static-server:latest 
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 27017
